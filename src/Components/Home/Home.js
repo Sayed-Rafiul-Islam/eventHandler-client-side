@@ -1,15 +1,18 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import AddEvent from '../AddEvent';
 import LatestEvents from '../LatestEvents/LatestEvents';
 import SearchedEvent from '../SearchedEvent';
+import UpdateEvent from '../UpdateEvent';
 
 const Home = () => {
     const [event, setEvent] = useState({});
     const [latestEvents, setLatestEvents] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [page, setPage] = useState(10000);
-    console.log(page)
     const [visibility, setVisibility] = useState(false);
+
 
     const getEvent = async e => {
         e.preventDefault();
@@ -53,54 +56,68 @@ const Home = () => {
             .then(data => {
                 const newEvents = latestEvents.filter(event => event?.uid !== uid);
                 setLatestEvents(newEvents);
+                toast.error('Event Deleted')
             })
     }
 
-    const createEvent = async e => {
-        e.preventDefault();
-    }
+
 
 
     return (
-        <div>
-            <form onSubmit={getEvent}>
-                <input type="number" name="uid" placeholder='Enter uid' />
-                <input type="submit" value='Search' />
-            </form>
+        <div className='row container-lg mt-5 mx-auto'>
+            <div className='col-lg-5 h-100 p-2 border border-success rounded rounded-5 me-4'>
+                <div className='mb-5 pb-5'>
+                    <h2>Search <span className='text-success'>Event</span></h2>
+                    <form className='d-flex align-items-center justify-content-center' onSubmit={getEvent}>
+                        <input type="number" name="uid" placeholder='Enter uid' />
+                        <input className='btn btn-outline-success' type="submit" value='Search' />
+                    </form>
+                    <SearchedEvent
+                        key={event._id}
+                        event={event}
+                    ></SearchedEvent>
+                </div>
 
-            <form onSubmit={createEvent}>
+                <div className='border h-75 border-success rounded rounded-5 p-4'>
+                    <h2>Latest <span className='text-success'>Event</span></h2>
+                    <button className={visibility ? 'btn btn-danger w-75' : 'btn btn-success w-75'} onClick={handleLatestEvents}>{visibility ? 'Hide Latest Events' : 'Latest Events'}</button>
+                    {
+                        visibility ?
+                            <div className='mt-5'>
+                                {
+                                    latestEvents?.map((latestEvent, index) => <LatestEvents
+                                        handleEventDelete={handleEventDelete}
+                                        key={latestEvent._id}
+                                        latestEvent={latestEvent}
+                                    ></LatestEvents>)
+                                }
+                                < div className='container mt-3'>
+                                    {
+                                        [...Array(pageCount).keys()]
+                                            .map(number => <button
+                                                className={number === page ? 'btn btn-outline-success mx-1' : 'btn btn-success mx-1'}
+                                                onClick={() => setPage(pageCount - 1 - number)}
+                                            >{number + 1}</button>)
+                                    }
+                                </div>
+                            </div>
+                            :
+                            ''
+                    }
+                </div>
+            </div>
 
-            </form>
+            <div className='col-lg-5 border border-success rounded rounded-5 ms-5'>
+                <div className='p-4 my-3 '>
+                    <h2>Add <span className='text-success'>Event</span></h2>
+                    <AddEvent></AddEvent>
+                </div>
 
-            <button onClick={handleLatestEvents}>{visibility ? 'Hide Latest Events' : 'Latest Events'}</button>
-
-            <SearchedEvent
-                key={event._id}
-                event={event}
-            ></SearchedEvent>
-
-            {
-                visibility ?
-                    <div>
-                        {
-                            latestEvents?.map((latestEvent, index) => <LatestEvents
-                                handleEventDelete={handleEventDelete}
-                                key={latestEvent._id}
-                                latestEvent={latestEvent}
-                            ></LatestEvents>)
-                        }
-                        < div className='container'>
-                            {
-                                [...Array(pageCount).keys()]
-                                    .map(number => <button
-                                        onClick={() => setPage(pageCount - 1 - number)}
-                                    >{number + 1}</button>)
-                            }
-                        </div>
-                    </div>
-                    :
-                    ''
-            }
+                <div className='p-4 my-3'>
+                    <h2>Update <span className='text-success'>Event</span></h2>
+                    <UpdateEvent></UpdateEvent>
+                </div>
+            </div>
         </div >
     );
 };
