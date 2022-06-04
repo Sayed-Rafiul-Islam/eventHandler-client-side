@@ -37,11 +37,11 @@ const AddEvent = () => {
                         attendees: data.attendees
                     }
 
-                    axios.post(`http://localhost:5000/api/v3/app/newEvent`, newEvent)
+                    axios.post(`https://boiling-savannah-20518.herokuapp.com/api/v3/app/newEvent`, newEvent)
                         .then(response => {
                             const { data } = response;
                             if (data.insertedId) {
-                                toast.success('Event Created')
+                                toast.success(`Event Created of Uid : ${newEvent.uid}`)
                             }
                         })
                     reset()

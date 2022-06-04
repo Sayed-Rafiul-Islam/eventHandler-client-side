@@ -36,7 +36,7 @@ const UpdateEvent = () => {
                         attendees: data.attendees
                     }
 
-                    fetch(`http://localhost:5000/api/v3/app/updateEvent?uid=${data.uid}`, {
+                    fetch(`https://boiling-savannah-20518.herokuapp.com/api/v3/app/updateEvent?uid=${data.uid}`, {
                         method: 'PUT',
                         headers: {
                             'content-type': 'application/json'
@@ -46,7 +46,7 @@ const UpdateEvent = () => {
                         .then(res => res.json())
                         .then(data => {
                             console.log(data)
-                            toast.success('Profile Updated')
+                            toast.success('Event Updated')
 
                         })
                     reset()

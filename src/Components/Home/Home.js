@@ -18,7 +18,7 @@ const Home = () => {
         e.preventDefault();
         const uid = e.target.uid.value;
         if (uid) {
-            const data = await axios.get(`http://localhost:5000/api/v3/app?uid=${uid}`);
+            const data = await axios.get(`https://boiling-savannah-20518.herokuapp.com/api/v3/app?uid=${uid}`);
             setEvent(data.data);
         }
         e.target.reset();
@@ -28,7 +28,7 @@ const Home = () => {
 
 
         const getPageCount = async () => {
-            const { data } = await axios.get('http://localhost:5000/api/v3/app/eventCount');
+            const { data } = await axios.get('https://boiling-savannah-20518.herokuapp.com/api/v3/app/eventCount');
             const count = data.count;
             const pages = Math.ceil(count / 5);
             setPageCount(pages)
@@ -40,7 +40,7 @@ const Home = () => {
     }
     useEffect(() => {
         const loadEvents = async () => {
-            const data = await axios.get(`http://localhost:5000/api/v3/app/latestEvents?page=${page}`);
+            const data = await axios.get(`https://boiling-savannah-20518.herokuapp.com/api/v3/app/latestEvents?page=${page}`);
             setLatestEvents(data.data);
         }
         loadEvents();
@@ -48,7 +48,7 @@ const Home = () => {
 
     const handleEventDelete = uid => {
         console.log(uid)
-        const url = `http://localhost:5000/api/v3/app/${uid}`;
+        const url = `https://boiling-savannah-20518.herokuapp.com/api/v3/app/${uid}`;
         fetch(url, {
             method: 'DELETE'
         })
@@ -95,7 +95,7 @@ const Home = () => {
                                     {
                                         [...Array(pageCount).keys()]
                                             .map(number => <button
-                                                className={number === page ? 'btn btn-outline-success mx-1' : 'btn btn-success mx-1'}
+                                                className='btn btn-outline-success mx-1'
                                                 onClick={() => setPage(pageCount - 1 - number)}
                                             >{number + 1}</button>)
                                     }
